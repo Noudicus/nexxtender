@@ -1,0 +1,31 @@
+packages:
+  esp: !include nexxtender_packages/esp.yaml
+  #webserver: !include nexxtender_packages/webserver.yaml # secret esphome_admin_password required
+  api: !include nexxtender_packages/api.yaml # secrets esphome_admin_password, wifi_ssid, wifi_password & esphome_api_key required
+  time: !include nexxtender_packages/time.yaml
+  ble: !include nexxtender_packages/ble.yaml # secrets nexxtender_mac & nexxtender_passkey required
+  device_information: !include nexxtender_packages/device_information.yaml
+  charging_basic_data: !include nexxtender_packages/charging_basic_data.yaml
+  version: !include nexxtender_packages/version.yaml
+  #transactions: !include nexxtender_packages/transactions.yaml
+  #diagnostics: !include nexxtender_packages/diagnostics.yaml
+  #dev_debug: !include nexxtender_packages/dev_debug.yaml
+
+substitutions:
+  device_name: nexxtender
+  friendly_name: Nexxtender
+  ble_uuid_receive_service: ${ble_uuid_prefix}ce #override the receive_service as it is in another service
+  generic_data_id_prefix: generic_data #as ble.yaml is using this global we need to add it.
+
+globals:
+  - id: g_${generic_data_id_prefix}_config_init
+    type: bool
+    initial_value: "false"
+  - id: g_${generic_data_id_prefix}_time_synced
+    type: bool
+    initial_value: "true"
+
+script:
+  - id: script_sync_time
+    then:
+      delay: 0s
